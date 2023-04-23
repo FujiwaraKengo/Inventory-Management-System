@@ -1,0 +1,6 @@
+{
+    "require": {
+        "kreait/firebase-php": "^5.26",
+        "picqer/php-barcode-generator": "^2.2"
+    }
+}
