@@ -35,7 +35,7 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Item Number</th>
+                                    <th>Type</th>
                                     <th>Item Name</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
@@ -55,12 +55,15 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
                                     if(isset($_GET['search'])){
                                         $filtervalues = strtolower($_GET['search']);
                                         $fetchData = array_filter($fetchData, function($item) use ($filtervalues){
-                                            return strpos(strtolower($item['item']), $filtervalues) !== false || strpos(strtolower($item['barcode']), $filtervalues) !== false;
+                                            return strpos(strtolower($item['item']), $filtervalues) !== false || strpos(strtolower($item['barcode']), $filtervalues) !== false || strpos(strtolower($item['type']), $filtervalues) !== false;
                                         });
                                     }
 
                                     if(!empty($fetchData)){
                                         $i=1;
+                                        $item_count = 0;
+                                        $_SESSION['item_count'] = $item_count;
+
                                         foreach($fetchData as $key => $row)
                                         {
                                             // Generate barcode SVG
@@ -69,9 +72,10 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
 
                                             // Set barcode image string in row data
                                             $row['barcodeimage'] = $barcodeSvg;
+                                            $item_count++;
                                             ?>
                                             <tr>
-                                                <td><?=$i++?></td>
+                                                <td><?=$row['type']?></td>
                                                 <td><?=$row['item']?></td>
                                                 <td><?=$row['price']?></td>
                                                 <td><?=$row['quantity']?></td>

@@ -221,12 +221,14 @@ if(isset($_POST['updateItem']))
 {
     $key = $_POST['key'];
     $item = $_POST['itemName'];
+    $type = $_POST['itemType'];
     $quantity = $_POST['itemQuantity'];
     $code = $_POST['itemBarcode'];
     $price = $_POST['itemPrice'];
 
     $updateData = [
         'item' => $item,
+        'type' => $type,
         'quantity' => $quantity,
         'barcode' => $code,
         'price' => $price
@@ -256,6 +258,7 @@ else
 if(isset($_POST['saveItem']))
 {
     $item = $_POST['itemName'];
+    $type = $_POST['itemType'];
     $quantity = $_POST['itemQuantity'];
     $code = $_POST['itemBarcode'];
     $price = $_POST['itemPrice'];
@@ -263,6 +266,7 @@ if(isset($_POST['saveItem']))
 
     $postData = [
         'item' => $item,
+        'type' => $type,
         'quantity' => $quantity,
         'barcode' => $code,
         'price' => $price,

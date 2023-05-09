@@ -39,6 +39,10 @@ if(isset($_GET['id']))
                             <input type="text" name="itemName" value= <?=$getData['item'];?> class="form-control">
                         </div>
                         <div class="form-group mb-3">
+                            <label for="">Item Type</label>
+                            <input type="text" name="itemType" value= <?=$getData['type'];?> class="form-control">
+                        </div>
+                        <div class="form-group mb-3">
                             <label for="">Item Price</label>
                             <input type="text" name="itemPrice" value= <?=$getData['price'];?> class="form-control">
                         </div>

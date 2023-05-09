@@ -41,6 +41,10 @@ $barcodeSvg = $generator->getBarcode($barcodeNumber, $generator::TYPE_EAN_13);
                             <input type="text" name="itemName" class="form-control">
                         </div>
                         <div class="form-group mb-3">
+                            <label for="">Item Type</label>
+                            <input type="text" name="itemType" class="form-control">
+                        </div>
+                        <div class="form-group mb-3">
                             <label for="">Item Price</label>
                             <input type="text" name="itemPrice" class="form-control">
                         </div>
