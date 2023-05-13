@@ -222,9 +222,9 @@ if(isset($_POST['updateItem']))
     $key = $_POST['key'];
     $item = $_POST['itemName'];
     $type = $_POST['itemType'];
-    $quantity = $_POST['itemQuantity'];
-    $code = $_POST['itemBarcode'];
-    $price = $_POST['itemPrice'];
+    $quantity = intval($_POST['itemQuantity']);
+    $code = intval($_POST['itemBarcode']);
+    $price = intval($_POST['itemPrice']);
 
     $updateData = [
         'item' => $item,
@@ -259,9 +259,9 @@ if(isset($_POST['saveItem']))
 {
     $item = $_POST['itemName'];
     $type = $_POST['itemType'];
-    $quantity = $_POST['itemQuantity'];
-    $code = $_POST['itemBarcode'];
-    $price = $_POST['itemPrice'];
+    $quantity = intval($_POST['itemQuantity']);
+    $code = intval($_POST['itemBarcode']);
+    $price = intval($_POST['itemPrice']);
 
 
     $postData = [
@@ -289,6 +289,85 @@ else
 
 }
 
+// -------------------------------For the Contact List--------------------------------//
+if(isset($_POST['addContact']))
+{
+    $supplier = $_POST['supplierName'];
+    $address = $_POST['addressName'];
+    $contact = $_POST['contactNumber'];
 
+
+    $postData = [
+        'supplier' => $supplier,
+        'address' => $address,
+        'contact' => $contact,
+    ];
+
+    $ref_table = 'supplier_contact';
+    $postRef_result = $database->getReference($ref_table)->push($postData);
+
+
+if($postRef_result)
+{
+    $_SESSION['status'] = 'Item Added Successfully';
+    header('Location: supplier.php');
+}
+else
+{
+    $_SESSION['status'] = 'Item Not Added';
+    header('Location: supplier.php');
+}
+
+}
+
+if(isset($_POST['updateContact']))
+{
+    $key = $_POST['key'];
+    $supplier = $_POST['supplierName'];
+    $address = $_POST['addressName'];
+    $contact = $_POST['contactNumber'];
+
+    $updateData = [
+        'supplier' => $supplier,
+        'address' => $address,
+        'contact' => $contact,
+    ];
+
+
+    $ref_table = 'supplier_contact/'.$key;
+    $updateQuery_result = $database->getReference($ref_table)->update($updateData);
+
+
+    if($updateQuery_result)
+{
+    $_SESSION['status'] = 'Item Updated Successfully';
+    header('Location: supplier.php');
+}
+else
+{
+    $_SESSION['status'] = 'Item Not Updated';
+    header('Location: supplier.php');
+}
+
+}
+
+if(isset($_POST['delete_cont']))
+{
+    $delete_item = $_POST['delete_cont'];
+
+    $ref_table = 'supplier_contact/'.$delete_item;
+    $deleteQuery_result = $database->getReference($ref_table)->remove();
+
+    if($deleteQuery_result)
+    {
+        $_SESSION['status'] = 'Item Deleted Successfully';
+        header('Location: supplier.php');
+    }
+    else
+    {
+        $_SESSION['status'] = 'Item Not Deleted';
+        header('Location: supplier.php');
+    }
+}
 
 ?>

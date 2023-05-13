@@ -2,7 +2,7 @@
 
   <div class="container">
 
-    <a class="navbar-brand" href="#">Item Inventory</a>
+    <a class="navbar-brand" href="home.php">Item Inventory</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -20,6 +20,10 @@
 
         <li class="nav-item">
           <a class="nav-link active" href="user-list.php">User List</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active" href="supplier.php">Contact List</a>
         </li>
 
         <?php if(!isset($_SESSION['$verify_user_id'])) : ?>

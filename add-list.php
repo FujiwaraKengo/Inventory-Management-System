@@ -6,7 +6,7 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
 // Generate a 12-digit barcode number using mt_rand()
 $barcodeNumber = mt_rand(100000000000, 999999999999);
 
-// Calculate the check digit using the algorithm for EAN-13
+// Calculate the check digit using the algorithm for TYPE_CODE_128
 $checkDigit = 0;
 $barcodeDigits = str_split($barcodeNumber);
 for ($i = 0; $i < 12; $i++) {
@@ -15,11 +15,11 @@ for ($i = 0; $i < 12; $i++) {
 $checkDigit = (10 - ($checkDigit % 10)) % 10;
 
 // Add the check digit to the barcode number
-$barcodeNumber .= $checkDigit;
+$barcodeNumber = intval($barcodeNumber . $checkDigit);
 
 // Generate the SVG barcode image using Picqer\Barcode
 $generator = new BarcodeGeneratorSvg();
-$barcodeSvg = $generator->getBarcode($barcodeNumber, $generator::TYPE_EAN_13);
+$barcodeSvg = $generator->getBarcode($barcodeNumber, $generator::TYPE_CODE_128);
 
 
 ?>
