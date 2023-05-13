@@ -18,7 +18,7 @@ if(isset($_GET['id']))
         
         $barcode = $getData['barcode'];
         $generator = new BarcodeGeneratorSVG();
-        $barcode_svg = $generator->getBarcode($barcode, $generator::TYPE_EAN_13);
+        $barcode_svg = $generator->getBarcode($barcode, $generator::TYPE_CODE_128);
 ?>
 
 <div class="container">

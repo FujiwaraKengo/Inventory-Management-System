@@ -68,7 +68,7 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
                                         {
                                             // Generate barcode SVG
                                             $barcodeGenerator = new Picqer\Barcode\BarcodeGeneratorSVG();
-                                            $barcodeSvg = $barcodeGenerator->getBarcode($row['barcode'], $barcodeGenerator::TYPE_EAN_13);
+                                            $barcodeSvg = $barcodeGenerator->getBarcode($row['barcode'], $barcodeGenerator::TYPE_CODE_128);
 
                                             // Set barcode image string in row data
                                             $row['barcodeimage'] = $barcodeSvg;
