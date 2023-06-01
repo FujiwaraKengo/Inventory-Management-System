@@ -1,6 +1,8 @@
 <?php
-include ('authentication.php');
-include ('includes/header.php');
+include('authentication.php');
+include('includes/header.php');
+
+$historyData = $database->getReference('history')->orderByChild('date')->getSnapshot()->getValue();
 ?>
 
 <div class="container">
@@ -15,55 +17,57 @@ include ('includes/header.php');
             }
             ?>
 
-            
-        </div>
-        
-        <div class = "row g-3 my-2">
-            <class class="col-md-3">
-                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                    <div>
-                        <h3 class="fs-5">Total Items: <?php echo isset($_SESSION['item_count']) ? $_SESSION['item_count'] : 0; ?></p>
-                    </div>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4>
+                        Record Log
+                    </h4>
                 </div>
-            </class>
-
-            <class class="col-md-3">
-                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                    <div>
-                        <h3 class="fs-5">Lowest Stock Item: </p>
-                    </div>
-                </div>
-            </class>
-
-            <class class="col-md-3">
-                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                    <div>
-                        <h3 class="fs-5">Out Of Stock Items: </p>
-                    </div>
-                </div>
-            </class>
-
-            <class class="col-md-3">
-                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                    <div>
-                        <h3 class="fs-5">Most Stock Item: </p>
-                    </div>
-                </div>
-            </class>
-        </div>
-        
-
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+                <div class="card-body">
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Stock ID</th>
+                                <th>Stock Name</th>
                                 <th>Action</th>
-                                <th>Item</th>
+                                <th>Changes</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            <?php
+                            if (!empty($historyData)) {
+                                // Sort the history data array in descending order based on the date
+                                krsort($historyData);
+                                
+                                foreach ($historyData as $key => $value) {
+                                    ?>
+                                    <tr>
+                                        <td><?= isset($value['date']) ? $value['date'] : '' ?></td>
+                                        <td><?= isset($value['barcode']) ? $value['barcode'] : '' ?></td>
+                                        <td><?= isset($value['name']) ? $value['name'] : '' ?></td>
+                                        <td><?= isset($value['action']) ? $value['action'] : '' ?></td>
+                                        <td>
+                                            <?php
+                                            if (isset($value['changes']) && is_array($value['changes'])) {
+                                                foreach ($value['changes'] as $field => $change) {
+                                                    echo $field . ': ' . $change . '<br>';
+                                                }
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <tr>
+                                    <td colspan='5'>No History Log Found</td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                        </tbody>
                     </table>
                 </div>
             </div>

@@ -26,7 +26,7 @@ include ('includes/header.php');
 
                         <form action="" method="GET">
                             <div class="input-group mb-3">
-                            <input type="text" name="search" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } elseif(isset($_GET['barcode'])) {echo $_GET['barcode']; } ?>" class="form-control" placeholder="Find Item...">
+                            <input type="text" name="search" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } elseif(isset($_GET['barcode'])) {echo $_GET['barcode']; } ?>" class="form-control" placeholder="Find Supplier...">
                                 <button type="submit" class="btn btn-secondary">Search</button>
                             </div>
                         </form>

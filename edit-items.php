@@ -36,19 +36,48 @@ if(isset($_GET['id']))
                         <input type="hidden" name="key" value="<?=$key_child;?>">
                         <div class="form-group mb-3">
                             <label for="">Item Name</label>
-                            <input type="text" name="itemName" value= <?=$getData['item'];?> class="form-control">
+                            <input type="text" name="itemName" value="<?=($getData['item']);?>" class="form-control">
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="">Item Type</label>
+                        <!-- <div class="form-group mb-3">
+                            <label for="">Category</label>
                             <input type="text" name="itemType" value= <?=$getData['type'];?> class="form-control">
+                        </div> -->
+                        <div class="form-group mb-3">
+                            <label for="selectCategory">Category</label>
+                            <div class="input-group">
+                                <select name="selectCategory" id="selectCategory" class="form-control" required>
+                                    <option value="">---Select---</option>
+                                    <option value="CPU" <?php if ($getData['type'] === 'CPU') echo 'selected'; ?>>CPU</option>
+                                    <option value="GPU" <?php if ($getData['type'] === 'GPU') echo 'selected'; ?>>GPU</option>
+                                    <option value="RAM" <?php if ($getData['type'] === 'RAM') echo 'selected'; ?>>RAM</option>
+                                    <option value="MOTHERBOARD" <?php if ($getData['type'] === 'MOTHERBOARD') echo 'selected'; ?>>Motherboard</option>
+                                    <option value="SSD" <?php if ($getData['type'] === 'SSD') echo 'selected'; ?>>SSD</option>
+                                    <option value="HDD" <?php if ($getData['type'] === 'HDD') echo 'selected'; ?>>HDD</option>
+                                    <option value="HEADSET" <?php if ($getData['type'] === 'HEADSET') echo 'selected'; ?>>Headset</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="">Item Price</label>
+                            <label for="">Cost (PHP)</label>
+                            <input type="text" name="itemCost" value= <?=$getData['cost'];?> class="form-control">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Price (PHP)</label>
                             <input type="text" name="itemPrice" value= <?=$getData['price'];?> class="form-control">
                         </div>
                         <div class="form-group mb-3">
                             <label for="">Quantity</label>
                             <input type="number" name="itemQuantity" value= <?=$getData['quantity'];?> class="form-control">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="itemUnit">Unit</label>
+                            <div class="input-group">
+                                <select name="itemUnit" id="itemUnit" class="form-control" required>
+                                    <option value="">---Select---</option>
+                                    <option value="Pieces" <?php if ($getData['unit'] === 'Pieces') echo 'selected'; ?>>Pcs</option>
+                                    <option value="Bundle" <?php if ($getData['unit'] === 'Bundle') echo 'selected'; ?>>Bundle</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="">Item Barcode:</label>

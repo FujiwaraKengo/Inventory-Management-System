@@ -15,7 +15,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active" href="index.php">Item List</a>
+          <a class="nav-link active" href="index.php">Stock Items</a>
         </li>
 
         <li class="nav-item">
@@ -23,7 +23,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active" href="supplier.php">Contact List</a>
+          <a class="nav-link active" href="supplier.php">Supplier Contacts</a>
         </li>
 
         <?php if(!isset($_SESSION['$verify_user_id'])) : ?>
