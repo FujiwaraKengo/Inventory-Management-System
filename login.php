@@ -10,6 +10,7 @@ if(isset($_SESSION['$verify_user_id']))
 include ('includes/header.php');
 ?>
 
+<div class="container custom-container">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -37,7 +38,7 @@ include ('includes/header.php');
                             </div>
                             <div class="form-group mb-3">
                                 <label for="">Password</label>
-                                <input type="text" name="password" class="form-control">
+                                <input type="password" name="password" class="form-control">
                             </div>
                             <div class="form-group mb-3">
                                 <button type="submit" name="loginAcc" class="btn btn-primary">Sign In</button>
@@ -48,6 +49,7 @@ include ('includes/header.php');
             </div>
         </div>
     </div>
+</div>
 
 <?php
 include('includes/footer.php');
