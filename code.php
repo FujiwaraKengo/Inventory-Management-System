@@ -269,26 +269,33 @@ if(isset($_POST['updateItem']))
 
 
     if($updateQuery_result)
-{
-    $historyData = [
-        'date' => date('Y-m-d H:i:s'),
-        'name' => $updateData['item'],
-        'barcode' => $code,
-        'changes' => $changes,
-        'action' => 'Updated',
+    {
+        $stockCardRef = $database->getReference('Stock_card')->getChild($key);
+        $stockCardData = $stockCardRef->getValue();
+        $stockCardData['cost'] = $cost;
+        $stockCardData['price'] = $price;
+        $stockCardRef->set($stockCardData);
 
-    ];
 
-    $database->getReference('history')->push($historyData);
-    
-    $_SESSION['status'] = 'Item Updated Successfully';
-    header('Location: index.php');
-}
-else
-{
-    $_SESSION['status'] = 'Item Not Updated';
-    header('Location: index.php');
-}
+        $historyData = [
+            'date' => date('Y-m-d H:i:s'),
+            'name' => $updateData['item'],
+            'barcode' => $code,
+            'changes' => $changes,
+            'action' => 'Updated',
+
+        ];
+
+        $database->getReference('history')->push($historyData);
+        
+        $_SESSION['status'] = 'Item Updated Successfully';
+        header('Location: index.php');
+    }
+    else
+    {
+        $_SESSION['status'] = 'Item Not Updated';
+        header('Location: index.php');
+    }
 
 }
 
@@ -318,6 +325,21 @@ if (isset($_POST['saveItem'])) {
     $postRef_result = $database->getReference($ref_table)->push($postData);
 
     if ($postRef_result) {
+
+        $itemUid = $postRef_result->getKey();
+
+        // Create a new stock card entry with initial total quantity
+        $stockCardData = [
+            'item' => $item,
+            'barcode' => $code,
+            'cost' => $cost,
+            'price' => $price,
+            'total_quantity' => $quantity,
+        ];
+
+        $stockCardRef = $database->getReference('Stock_card')->getChild($itemUid);
+        $stockCardRef->set($stockCardData);
+
         $historyData = [
             'date' => date('Y-m-d H:i:s'),
             'barcode' => $code,
@@ -346,6 +368,13 @@ if (isset($_POST['stock_in']) || isset($_POST['stock_out'])) {
         $quantityChange = intval($_POST['stock_in_quantity']);
         $newQuantity = $currentQuantity + $quantityChange;
         $action = 'StockIn';
+
+        // Update the total_quantity in the Stock_card table
+        $stockCardRef = $database->getReference('Stock_card')->getChild($itemKey);
+        $stockCardData = $stockCardRef->getValue();
+        $stockCardData['total_quantity'] += $quantityChange;
+        $stockCardRef->set($stockCardData);
+        
     } elseif (isset($_POST['stock_out'])) {
         $quantityChange = intval($_POST['stock_out_quantity']);
         
@@ -359,6 +388,11 @@ if (isset($_POST['stock_in']) || isset($_POST['stock_out'])) {
         $newQuantity = $currentQuantity - $quantityChange;
         $newQuantity = max(0, $newQuantity); // Ensure quantity doesn't go below zero
         $action = 'StockOut';
+
+        $stockCardRef = $database->getReference('Stock_card')->getChild($itemKey);
+        $stockCardData = $stockCardRef->getValue();
+        $stockCardData['total_stockOut'] += $quantityChange;
+        $stockCardRef->set($stockCardData);
     }
 
     // Get the item data before updating the quantity
@@ -373,6 +407,7 @@ if (isset($_POST['stock_in']) || isset($_POST['stock_out'])) {
     $updateQuery_result = $database->getReference($ref_table)->update($updateData);
 
     if ($updateQuery_result) {
+
         // Prepare the history data
         $historyData = [
             'barcode' => $itemData['barcode'],

@@ -1,6 +1,8 @@
 <?php
 include('authentication.php');
 include('includes/header.php');
+
+$StockCard = $database->getReference('Stock_card')->getValue();
 ?>
 
 <div class="container custom-container">
@@ -39,10 +41,52 @@ include('includes/header.php');
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Add your data rows here -->
-                                    <!-- Example data row -->
-                                    <tr>
-                                    </tr>
+                                    <?php
+                                        if(!empty($StockCard))
+                                        {
+                                            foreach($StockCard as $key => $row)
+                                            {
+                                                $totalStockIn = isset($row['total_quantity']) ? $row['total_quantity'] * $row['cost'] : 0;
+                                                $totalStockOut = isset($row['total_stockOut']) ? $row['total_stockOut'] * $row['price'] : 0;
+                                                ?>
+                                                <tr>
+                                                    <td><?=$row['barcode']?></td>
+                                                    <td><?=$row['item']?></td>
+                                                    <td>
+                                                        <?php
+                                                        if (!empty($row['total_quantity'])) {
+                                                            echo $row['total_quantity'];
+                                                        } else {
+                                                            echo 'No StockIn Found';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td><?=$row['cost']?></td>
+                                                    <td><?=$totalStockIn?></td>
+                                                    <td>
+                                                        <?php
+                                                        if (!empty($row['total_stockOut'])) {
+                                                            echo $row['total_stockOut'];
+                                                        } else {
+                                                            echo 'No StockOut Found';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td><?=$row['price']?></td>
+                                                    <td><?=$totalStockOut?></td>
+                                                </tr>
+                                                <?php
+                                            }
+                                        }
+                                        else
+                                        {
+                                            ?>
+                                            <tr>
+                                                <td colspan='8'>No Items Found</td>
+                                            </tr>
+                                            <?php
+                                        }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
