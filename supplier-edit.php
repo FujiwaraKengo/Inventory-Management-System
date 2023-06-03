@@ -1,4 +1,5 @@
 <?php
+include('authentication.php');
 include('dbcon.php');
 include('includes/header.php');
 
@@ -17,6 +18,14 @@ if(isset($_GET['id']))
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                <?php
+                    if (isset($_SESSION['status'])) {
+                        echo "<h5 class='alert alert-success'>" . $_SESSION['status'] . "</h5>";
+                        unset($_SESSION['status']);
+                    }
+                ?>
+
                 <div class="card">
                     <div class="card-header">
                         <h4>

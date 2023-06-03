@@ -11,6 +11,9 @@
           <a class="nav-link active" href="home.php">Record Log</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link active" href="stock-card.php">Stock Card</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" href="index.php">Stock Items</a>
         </li>
         <li class="nav-item">

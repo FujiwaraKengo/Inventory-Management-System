@@ -1,4 +1,5 @@
 <?php
+include('authentication.php');
 include ('includes/header.php');
 require_once 'vendor/autoload.php';
 use Picqer\Barcode\BarcodeGeneratorSvg;
@@ -28,6 +29,14 @@ $barcodeSvg = $generator->getBarcode($barcodeNumber, $generator::TYPE_CODE_128);
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                <?php
+                        if (isset($_SESSION['status'])) {
+                            echo "<h5 class='alert alert-success'>" . $_SESSION['status'] . "</h5>";
+                            unset($_SESSION['status']);
+                        }
+                ?>
+
                 <div class="card">
                     <div class="card-header">
                         <h4>

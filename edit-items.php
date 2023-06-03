@@ -1,4 +1,5 @@
 <?php
+include('authentication.php');
 include('dbcon.php');
 include('includes/header.php');
 require_once 'vendor/autoload.php';
@@ -25,6 +26,14 @@ if(isset($_GET['id']))
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                <?php
+                    if (isset($_SESSION['status'])) {
+                        echo "<h5 class='alert alert-success'>" . $_SESSION['status'] . "</h5>";
+                        unset($_SESSION['status']);
+                    }
+                ?>
+
                 <div class="card">
                     <div class="card-header">
                         <h4>
@@ -68,7 +77,7 @@ if(isset($_GET['id']))
                             </div>
                             <div class="form-group mb-3">
                                 <label for="">Quantity</label>
-                                <input type="number" name="itemQuantity" value= <?=$getData['quantity'];?> class="form-control">
+                                <input type="number" name="itemQuantity" value="<?=$getData['quantity'];?>" class="form-control" readonly>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="itemUnit">Unit</label>

@@ -4,7 +4,7 @@ include ('includes/header.php');
 use Picqer\Barcode\BarcodeGeneratorSvg;
 ?>
 
-<div class="container custom-container">
+
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -220,7 +220,7 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
             </div>
         </div>
     </div>
-</div>
+
 
 <?php
 include ('includes/footer.php');
