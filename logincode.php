@@ -31,11 +31,11 @@ if (isset($_POST['loginAcc'])) {
                 $uid = $verifiedIdToken->claims()->get('sub');
 
                 $claims = $auth->getUser($uid)->customClaims;
-                if (isset($claims['superAdmin'])) {
+                if(isset($claims['superAdmin']) == true) {
                     $_SESSION['$verify_superAdmin'] = true;
                     $_SESSION['$verify_user_id'] = $uid;
                     $_SESSION['$idTokenString'] = $idTokenString;
-                } elseif (isset($claims['admin'])) {
+                } elseif(isset($claims['admin']) == true) {
                     $_SESSION['$verify_admin'] = true;
                     $_SESSION['$verify_user_id'] = $uid;
                     $_SESSION['$idTokenString'] = $idTokenString;

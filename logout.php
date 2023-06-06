@@ -6,11 +6,11 @@ unset($_SESSION['$idTokenString']);
 
 if(isset($_SESSION['expiry_status']))
 {
-    $_SESSION['status'] = "Session Has Expired, Sign In Again";
+    $_SESSION['status'] = "Logged Out Successfully";
 }
 else
 {
-    $_SESSION['status'] = "Logged Out Successfully";
+    $_SESSION['status'] = "Session Has Expired, Sign In Again";
 }
 header('Location: login.php');
 exit();

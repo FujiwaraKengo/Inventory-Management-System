@@ -1,7 +1,7 @@
 <?php
-include('authentication.php');
+include('Optional Role Authentication Code/auth.php');
 include('includes/header.php');
-use Picqer\Barcode\BarcodeGeneratorSvg;
+
 ?>
 
 <div class="container custom-container">
