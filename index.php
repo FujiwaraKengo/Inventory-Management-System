@@ -16,11 +16,16 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
                 }
                 ?>
 
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" id="lowStockAlert" style="display: none;">
+                    <span id="lowStockItem"></span> Stock Quantity Almost Low, Stock In As Soon As Possible.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
                 <div class="card mt-4">
                     <div class="card-header">
                         <h4>
                             Stock Inventory Item
-                            <a href='add-list.php' class='btn btn-primary float-end'> Add Stock </a>
+                            <a href='add-list.php' class='btn btn-primary float-end btn-fixed-width'> Add Stock </a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -29,7 +34,7 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
                             <input type="text" id="searchInput" name="search" required
                                 value="<?php if (isset($_GET['search'])) {echo $_GET['search'];} elseif (isset($_GET['barcode'])) {echo $_GET['barcode'];} ?>"
                                 class="form-control" placeholder="Find Item...">
-                            <button id="clearButton" class="btn btn-secondary" type="button">Clear</button>
+                            <button id="clearButton" class="btn btn-secondary btn-fixed-width" type="button">Clear</button>
                         </div>
 
                         <div class="table-responsive table-responsive-sm">
@@ -91,54 +96,117 @@ use Picqer\Barcode\BarcodeGeneratorSvg;
                                                 <input type="hidden" name="item_key" value="<?= $key ?>">
                                                 <input type="hidden" name="current_quantity" value="<?= $row['quantity'] ?>">
                                                 <?php if ($row['quantity'] <= 0) : ?>
-                                                <button type="button" class="btn btn-warning btn-sm"
-                                                    data-bs-toggle="modal" data-bs-target="#outOfStockModal<?=$key?>">Out
-                                                    of Stock</button>
+                                                    <button type="button" class="btn btn-warning btn-sm btn-fixed-width" data-bs-toggle="modal" data-bs-target="#outOfStockModal<?=$key?>">Out of Stock</button>
                                                 <?php elseif ($row['quantity'] >= 20) : ?>
-                                                <button type="button" class="btn btn-purple btn-sm"
-                                                    data-bs-toggle="modal" data-bs-target="#overStockModal<?=$key?>">Overstock</button>
+                                                    <button type="button" class="btn btn-purple btn-sm btn-fixed-width" data-bs-toggle="modal" data-bs-target="#overStockModal<?=$key?>">Overstock</button>
                                                 <?php else : ?>
-                                                <button type="button" class="btn btn-success btn-sm"
-                                                    data-bs-toggle="modal" data-bs-target="#stockInModal<?=$key?>">Stock
-                                                    In</button>
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    data-bs-toggle="modal" data-bs-target="#stockOutModal<?=$key?>">Stock
-                                                    Out</button>
+                                                    <button type="button" class="btn btn-success btn-sm btn-fixed-width" data-bs-toggle="modal" data-bs-target="#stockInModal<?=$key?>">Stock In</button>
+                                                    <button type="button" class="btn btn-danger btn-sm btn-fixed-width" data-bs-toggle="modal" data-bs-target="#stockOutModal<?=$key?>">Stock Out</button>
+                                                <?php endif; ?>
+                                                <?php if ($row['quantity'] < 5) : ?>
+                                                    <script>
+                                                        // Show the alert popup
+                                                        document.getElementById('lowStockAlert').style.display = 'block';
+                                                        // Set the low stock item name
+                                                        document.getElementById('lowStockItem').innerText = '<?= $row['item'] ?>';
+                                                    </script>
                                                 <?php endif; ?>
                                             </form>
                                         </td>
 
-                                        <!-- Stock In Modal -->
-                                        <div class="modal fade" id="stockInModal<?=$key?>" tabindex="-1"
-                                            aria-labelledby="stockInModalLabel<?=$key?>" aria-hidden="true">
-                                            <!-- modal content -->
+                                        <!--Stock In Modal-->
+                                        <div class="modal fade" id="stockInModal<?=$key?>" tabindex="-1" aria-labelledby="stockInModalLabel<?=$key?>" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="stockInModalLabel<?=$key?>">Stock In</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="code.php" method="POST">
+                                                            <input type="hidden" name="item_key" value="<?=$key?>">
+                                                            <input type="hidden" name="current_quantity" value="<?=$row['quantity']?>">
+
+                                                            <div class="mb-3">
+                                                                <label for="stockInQuantity<?=$key?>" class="form-label">Quantity</label>
+                                                                <input type="number" class="form-control" id="stockInQuantity<?=$key?>" name="stock_in_quantity" required>
+                                                            </div>
+
+                                                            <button type="submit" name="stock_in" class="btn btn-success">Stock In</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <!-- Stock Out Modal -->
-                                        <div class="modal fade" id="stockOutModal<?=$key?>" tabindex="-1"
-                                            aria-labelledby="stockOutModalLabel<?=$key?>" aria-hidden="true">
-                                            <!-- modal content -->
+                                        <!--Stock Out Modal-->
+                                        <div class="modal fade" id="stockOutModal<?=$key?>" tabindex="-1" aria-labelledby="stockOutModalLabel<?=$key?>" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="stockOutModalLabel<?=$key?>">Stock Out</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="code.php" method="POST">
+                                                            <input type="hidden" name="item_key" value="<?=$key?>">
+                                                            <input type="hidden" name="current_quantity" value="<?=$row['quantity']?>">
+
+                                                            <div class="mb-3">
+                                                                <label for="stockOutQuantity<?=$key?>" class="form-label">Quantity</label>
+                                                                <input type="number" class="form-control" id="stockOutQuantity<?=$key?>" name="stock_out_quantity" required>
+                                                            </div>
+
+                                                            <button type="submit" name="stock_out" class="btn btn-danger">Stock Out</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <!-- Out of Stock Modal -->
-                                        <div class="modal fade" id="outOfStockModal<?=$key?>" tabindex="-1"
-                                            aria-labelledby="outOfStockModalLabel<?=$key?>" aria-hidden="true">
-                                            <!-- modal content -->
+                                        <!--Out of Stock Modal-->
+                                        <div class="modal fade" id="outOfStockModal<?=$key?>" tabindex="-1" aria-labelledby="outOfStockModalLabel<?=$key?>" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="outOfStockModalLabel<?=$key?>">Out of Stock</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>The item "<?=$row['item']?>" is currently out of stock. Please Add.</p>
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stockInModal<?=$key?>" data-bs-dismiss="modal">Stock In</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <!-- OverStock Modal -->
-                                        <div class="modal fade" id="overStockModal<?=$key?>" tabindex="-1"
-                                            aria-labelledby="overStockModalLabel<?=$key?>" aria-hidden="true">
-                                            <!-- modal content -->
+                                        <!--OverStock Modal-->
+                                        <div class="modal fade" id="overStockModal<?=$key?>" tabindex="-1" aria-labelledby="overStockModalLabel<?=$key?>" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="overStockModalLabel<?=$key?>">OverStock</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>The item "<?=$row['item']?>" is overstocked. Please stock out before adding more quantity.</p>
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stockOutModal<?=$key?>" data-bs-dismiss="modal">Stock Out</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <td>
-                                            <a href='edit-items.php?id=<?=$key;?>' class='btn btn-primary btn-sm'>Edit</a>
+                                            <a href='edit-items.php?id=<?=$key;?>' class='btn btn-primary btn-sm btn-fixed-width'>Edit</a>
                                         </td>
                                         <td>
                                             <form action="code.php" method="POST">
                                                 <button type="submit" name="delete_btn" value="<?=$key?>"
-                                                    class="btn btn-danger btn-sm">Delete</button>
+                                                    class="btn btn-danger btn-sm btn-fixed-width">Delete</button>
                                             </form>
                                         </td>
                                     </tr>

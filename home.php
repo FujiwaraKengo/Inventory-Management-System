@@ -42,7 +42,7 @@ $historyData = $database->getReference('history')->orderByChild('date')->getSnap
                                         krsort($historyData);
 
                                         foreach ($historyData as $key => $value) {
-                                    ?>
+                                        ?>
                                             <tr>
                                                 <td><?= isset($value['date']) ? $value['date'] : '' ?></td>
                                                 <td><?= isset($value['barcode']) ? $value['barcode'] : '' ?></td>

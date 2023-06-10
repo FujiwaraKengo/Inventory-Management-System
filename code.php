@@ -206,18 +206,19 @@ if(isset($_POST['delete_btn']))
 
     // Remove the item
     $deleteQuery_result = $database->getReference('items')->getChild($delete_item)->remove();
+    $deleteQuery_result = $database->getReference('Stock_card')->getChild($delete_item)->remove();
 
     if($deleteQuery_result)
     {
         // Log the delete action
-        $historyData = [
+        $stockHistoryData = [
+            'date' => date('Y-m-d H:i:s'),
             'barcode' => $itemData['barcode'],
             'name' => $itemData['item'],
-            'date' => date('Y-m-d H:i:s'),
-            'action' => 'Deleted'
+            'action' => 'Deleted',
         ];
 
-        $database->getReference('history')->push($historyData);
+        $database->getReference('history')->push($stockHistoryData);
 
         $_SESSION['status'] = 'Item Deleted Successfully';
         header('Location: index.php');
@@ -274,8 +275,8 @@ if(isset($_POST['updateItem']))
         $stockCardData = $stockCardRef->getValue();
         $stockCardData['cost'] = $cost;
         $stockCardData['price'] = $price;
+        $stockCardData['item'] = $updateData['item'];
         $stockCardRef->set($stockCardData);
-
 
         $historyData = [
             'date' => date('Y-m-d H:i:s'),
@@ -334,20 +335,36 @@ if (isset($_POST['saveItem'])) {
             'barcode' => $code,
             'cost' => $cost,
             'price' => $price,
+            'stock_on_hand' => $quantity,
             'total_quantity' => $quantity,
         ];
 
         $stockCardRef = $database->getReference('Stock_card')->getChild($itemUid);
         $stockCardRef->set($stockCardData);
 
-        $historyData = [
+        // Create the stockHistory database with initial date
+        $stockHistoryData = [
             'date' => date('Y-m-d H:i:s'),
             'barcode' => $code,
             'name' => $item,
             'action' => 'New Stock Added',
         ];
 
-        $database->getReference('history')->push($historyData);
+        $database->getReference('history')->push($stockHistoryData);
+
+        // Add StockIn entry to uHistory
+        $stockInHistoryData = [
+            'date' => date('Y-m-d H:i:s'),
+            'barcode' => $code,
+            'name' => $item,
+            'action' => 'StockIn',
+            'changes' => [
+                'quantity' => $quantity
+            ]
+        ];
+
+        $stockInRef = $database->getReference('Stock_card')->getChild($itemUid)->getChild('uHistory');
+        $stockInRef->push($stockInHistoryData);
 
         $_SESSION['status'] = 'Item Added Successfully';
         header('Location: index.php');
@@ -356,6 +373,7 @@ if (isset($_POST['saveItem'])) {
         header('Location: index.php');
     }
 }
+
 
 
 
@@ -373,6 +391,7 @@ if (isset($_POST['stock_in']) || isset($_POST['stock_out'])) {
         $stockCardRef = $database->getReference('Stock_card')->getChild($itemKey);
         $stockCardData = $stockCardRef->getValue();
         $stockCardData['total_quantity'] += $quantityChange;
+        $stockCardData['stock_on_hand'] = $newQuantity;
         $stockCardRef->set($stockCardData);
         
     } elseif (isset($_POST['stock_out'])) {
@@ -392,6 +411,7 @@ if (isset($_POST['stock_in']) || isset($_POST['stock_out'])) {
         $stockCardRef = $database->getReference('Stock_card')->getChild($itemKey);
         $stockCardData = $stockCardRef->getValue();
         $stockCardData['total_stockOut'] += $quantityChange;
+        $stockCardData['stock_on_hand'] = $newQuantity;
         $stockCardRef->set($stockCardData);
     }
 
@@ -420,6 +440,8 @@ if (isset($_POST['stock_in']) || isset($_POST['stock_out'])) {
         ];
 
         // Add the history data to the database
+        $historyRef = $database->getReference('Stock_card')->getChild($itemKey)->getChild('uHistory');
+        $historyRef->push($historyData);
         $database->getReference('history')->push($historyData);
 
         $_SESSION['status'] = 'Quantity Updated Successfully';

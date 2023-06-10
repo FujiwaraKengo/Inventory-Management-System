@@ -28,6 +28,16 @@
             background-color: #800080; /* Darker shade of purple on hover */
             border-color: #800080; /* Darker shade of purple on hover */
         }
+
+        .btn-fixed-width {
+            width: 80px; /* Adjust the width as needed */
+        }
+        
+        .custom-table-width {
+            width: 30%; /* Adjust the width as per your requirements */
+            margin: 0 auto; /* Center the table horizontally */
+        }
+
     </style>
 
     <title>Inventory Management System</title>
