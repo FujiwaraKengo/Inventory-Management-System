@@ -20,7 +20,7 @@
           <a class="nav-link active" href="user-list.php">User List</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="supplier.php">Supplier Contacts</a>
+          <a class="nav-link active" href="supplier.php">Supplier</a>
         </li>
         <?php endif; ?>
       </ul>

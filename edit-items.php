@@ -20,6 +20,10 @@ if(isset($_GET['id']))
         $barcode = $getData['barcode'];
         $generator = new BarcodeGeneratorSVG();
         $barcode_svg = $generator->getBarcode($barcode, $generator::TYPE_CODE_128);
+        
+        // Retrieve supplier data from Firebase
+        $supplierRef = $database->getReference('supplier_contact');
+        $supplierData = $supplierRef->getValue();
 ?>
 
 <div class="container custom-container">
@@ -47,6 +51,21 @@ if(isset($_GET['id']))
                             <div class="form-group mb-3">
                                 <label for="">Item Name</label>
                                 <input type="text" name="itemName" value="<?=($getData['item']);?>" class="form-control">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="supplierName">Supplier</label>
+                                <div class="input-group">
+                                    <select name="supplierName" id="supplierName" class="form-control" required>
+                                        <?php
+                                        $selectedSupplier = isset($getData['supplierName']) ? $getData['supplierName'] : '';
+                                        foreach ($supplierData as $supplier) {
+                                            $supplierName = $supplier['supplier'];
+                                            $selected = $supplierName === $selectedSupplier ? 'selected' : '';
+                                            echo "<option value=\"$supplierName\" $selected>$supplierName</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
                             <!-- <div class="form-group mb-3">
                                 <label for="">Category</label>

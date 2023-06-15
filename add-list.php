@@ -22,6 +22,9 @@ $barcodeNumber = intval($barcodeNumber . $checkDigit);
 $generator = new BarcodeGeneratorSvg();
 $barcodeSvg = $generator->getBarcode($barcodeNumber, $generator::TYPE_CODE_128);
 
+$supplierRef = $database->getReference('supplier_contact');
+$supplierSnapshot = $supplierRef->getSnapshot();
+$suppliers = $supplierSnapshot->getValue();
 
 ?>
 
@@ -49,6 +52,17 @@ $barcodeSvg = $generator->getBarcode($barcodeNumber, $generator::TYPE_CODE_128);
                             <div class="form-group mb-3">
                                 <label for="">Item Name</label>
                                 <input type="text" name="itemName" class="form-control">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="supplierName">Supplier</label>
+                                <div class="input-group">
+                                    <select name="supplierName" id="supplierName" class="form-control" required>
+                                        <option value="">---Select Supplier---</option>
+                                        <?php foreach ($suppliers as $supplier) { ?>
+                                            <option value="<?php echo $supplier['supplier']; ?>"><?php echo $supplier['supplier']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
                             <!-- <div class="form-group mb-3">
                                 <label for="">Category</label>

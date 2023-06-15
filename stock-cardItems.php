@@ -42,6 +42,10 @@ $totalStockOut = 0;
                                         <td><?= isset($getData['item']) ? $getData['item'] : '' ?></td>
                                     </tr>
                                     <tr>
+                                        <th class="text text-center">Supplier:</th>
+                                        <td><?= isset($getData['supplier']) ? $getData['supplier'] : '' ?></td>
+                                    </tr>
+                                    <tr>
                                         <th class="text text-center">Stock Cost:</th>
                                         <td>₱<?= isset($getData['cost']) ? $getData['cost'] : '' ?></td>
                                     </tr>
@@ -123,7 +127,7 @@ $totalStockOut = 0;
                                 </tbody>
                             </table>
                             <div class="text-center mt-4">
-                                <button class="btn btn-primary" onclick="printTable()">Print as PDF</button>
+                                <button class="btn btn-primary no-print" onclick="printTable()">Print as PDF</button>
                             </div>
                         </div>
                     </div>

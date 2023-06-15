@@ -235,6 +235,7 @@ if(isset($_POST['updateItem']))
 {
     $key = $_POST['key'];
     $item = $_POST['itemName'];
+    $suppCont = $_POST['supplierName'];
     $type = $_POST['selectCategory'];
     $quantity = intval($_POST['itemQuantity']);
     $code = intval($_POST['itemBarcode']);
@@ -244,6 +245,7 @@ if(isset($_POST['updateItem']))
 
     $updateData = [
         'item' => $item,
+        'supplier' => $suppCont,
         'type' => $type,
         'quantity' => $quantity,
         'barcode' => $code,
@@ -276,6 +278,7 @@ if(isset($_POST['updateItem']))
         $stockCardData['cost'] = $cost;
         $stockCardData['price'] = $price;
         $stockCardData['item'] = $updateData['item'];
+        $stockCardData['supplier'] = $updateData['supplier'];
         $stockCardRef->set($stockCardData);
 
         $historyData = [
@@ -305,6 +308,7 @@ if(isset($_POST['updateItem']))
 
 if (isset($_POST['saveItem'])) {
     $item = $_POST['itemName'];
+    $suppCont = $_POST['supplierName'];
     $type = $_POST['selectCategory'];
     $quantity = intval($_POST['itemQuantity']);
     $code = intval($_POST['itemBarcode']);
@@ -314,6 +318,7 @@ if (isset($_POST['saveItem'])) {
 
     $postData = [
         'item' => $item,
+        'supplier' => $suppCont,
         'type' => $type,
         'quantity' => $quantity,
         'barcode' => $code,
@@ -332,6 +337,7 @@ if (isset($_POST['saveItem'])) {
         // Create a new stock card entry with initial total quantity
         $stockCardData = [
             'item' => $item,
+            'supplier' => $suppCont,
             'barcode' => $code,
             'cost' => $cost,
             'price' => $price,

@@ -38,6 +38,21 @@
             margin: 0 auto; /* Center the table horizontally */
         }
 
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            table tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+        }
+
     </style>
 
     <title>Inventory Management System</title>
